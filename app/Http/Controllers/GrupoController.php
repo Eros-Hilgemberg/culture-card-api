@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Grupo;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class GrupoController extends Controller
@@ -15,6 +16,7 @@ class GrupoController extends Controller
     public function card(int $id)
     {
         $grupo = Grupo::findOrFail($id);
-        return view('card.grupo', compact('grupo'));
+        $pdf = Pdf::loadView('card.grupo', ['grupo' => $grupo]);
+        return $pdf->stream('Card_Grupo.pdf');
     }
 }

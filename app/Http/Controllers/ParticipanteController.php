@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Participante;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ParticipanteController extends Controller
 {
@@ -15,7 +16,8 @@ class ParticipanteController extends Controller
     public function card(int $id)
     {
         $participante = Participante::findOrFail($id);
-        return view('card.participante', compact('participante'));
+        $pdf = Pdf::loadView('card.participante', ['participante' => $participante]);
+        return $pdf->stream('Card_Participante.pdf');
     }
     public function qrCode(int $id, string $cpf)
     {
