@@ -98,7 +98,7 @@
             height: auto;
             /* background-color: lightgray; */
             top: 30%;
-            left: 42%;
+            left: 45%;
             bottom: 2%;
             right: 30%;
         }
@@ -111,17 +111,17 @@
             top: 25%;
         }
 
-        .imageQrcode {
-            height: 70px;
-            width: 70px;
+        .frontQrcode{
+            height: 75px;
+            width: 75px;
             position: absolute;
-            background-color: var(--secondary-color);
+            /* background-color: var(--secondary-color); */
             right: 4%;
             bottom: 4%;
         }
 
         .campo {
-            margin-bottom: 10px;
+            margin-bottom: 13px;
         }
 
         .tituloCampo {
@@ -169,6 +169,52 @@
             right: 5%;
             width: auto;
             height: 120px;
+        }
+        .qrcode{
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            left: 37%;
+            top: 35%;
+        }
+        .imageQrcode{
+            width: 100%;
+            height: 100%;
+            /* border: solid 2px var(--secondary-color); */
+            border-radius: 5;
+        }
+        .linhaH {
+            position: absolute;
+            width: 68%;
+            height: 2px;
+            background-color: var(--primary-color);
+            bottom: 15%;
+            border-radius: 0 5 5 0;
+        }
+        .impacti{
+            position: absolute;
+            right:4%;
+            bottom: 11%;
+        }
+        .impacti p{
+            /* font-family: "Arimo", sans-serif; */
+            font-size: 30px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: var(--primary-color);
+        }
+        .textLinha{
+            position: absolute;
+            bottom: 10%;
+            right: 32%;
+            text-align: center;
+        }
+        .textLinha p{
+            font-family: "Montserrat", sans-serif;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: var(--primary-color);
         }
     </style>
 </head>
@@ -222,14 +268,24 @@
             <div class="imagePessoa">
                 <img src="{{$imagens->fotoPessoa}}" alt="Foto da pessoa">
             </div>
-            <div class="imageQrcode">
-
+            <div class="frontQrcode">
+            <img class="imageQrcode" src="{{$imagens->smallQrcode}}" alt="">
             </div>
         </div>
         <div class="separador"></div>
         <div class="card_back">
             <div class="superior">
                 <img src="{{$imagens->logos}}" alt="logos">
+            </div>
+            <div class="qrcode">
+                <img class="imageQrcode" src="{{$imagens->qrcode}}" alt="">
+            </div>
+            <div class="linhaH"></div>
+            <div class="textLinha">
+                <p>VÁLIDO EM TODO O TERRITÓRIO MUNICIPAL</p>
+            </div>
+            <div class="impacti">
+                <p>impacti</p>
             </div>
         </div>
     </div>

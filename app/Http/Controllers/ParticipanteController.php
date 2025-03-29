@@ -6,6 +6,7 @@ use App\Helpers\Helper;
 use App\Models\Participante;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class ParticipanteController extends Controller
 {
@@ -15,23 +16,22 @@ class ParticipanteController extends Controller
         return $participante;
     }
     public function card(int $id)
-    {
+    {  
         $converter = new Helper();
+        $participante = Participante::findOrFail($id);
+        $menssage = $converter->encodeMessage($id,$participante->documento->cpf);
+
         $imagens = (object)[
             "fotoPessoa" => $converter->convertImage("PessoaFoto.jpg"),
             "logoConselho" => $converter->convertImage("conselho.png"),
             "logoImpact" => $converter->convertImage("impact.png"),
             "logos" => $converter->convertImage("logos.png"),
-            "background" => $converter->convertImage("background.png")
+            "background" => $converter->convertImage("background.png"),
+            "smallQrcode" => $converter->generateQrcode($menssage, [85, 26, 37],[248, 247, 240]),
+            "qrcode" => $converter->generateQrcode($menssage, [248, 247, 240],[85, 26, 37])
         ];
-        $participante = Participante::findOrFail($id);
         $pdf = Pdf::loadView('card.participante', ['participante' => $participante, 'imagens' => $imagens]);
         return $pdf->stream('Card_Participante.pdf');
-    }
-    public function cardtese(int $id)
-    {
-        $participante = Participante::findOrFail($id);
-        return view('card.participante')->with(compact('participante'));
     }
     public function qrCode(int $id, string $cpf)
     {
