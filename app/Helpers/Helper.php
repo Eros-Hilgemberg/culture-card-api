@@ -20,7 +20,6 @@ class Helper
     public function encodeMessage(int $id, $numberdoc)
     {
         $mensagemConvertida = base64_encode($id . $numberdoc);
-        dd($mensagemConvertida);
         return $mensagemConvertida;
     }
 }

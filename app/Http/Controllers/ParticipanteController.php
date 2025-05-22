@@ -6,14 +6,18 @@ use App\Helpers\Helper;
 use App\Models\Participante;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\JsonResponse;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class ParticipanteController extends Controller
 {
-    public function show(int $id)
+    public function show(Participante $participante): JsonResponse
     {
-        $participante = Participante::findOrFail($id);
-        return $participante;
+        $participante->documento;
+        return response()->json([
+            'status' => true,
+            'participante' => $participante,
+        ], 200);
     }
     public function card(int $id)
     {  
