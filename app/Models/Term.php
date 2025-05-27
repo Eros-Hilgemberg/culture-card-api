@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Contato extends Model
+class Term extends Model
 {
     use HasFactory;
+    protected $table = 'term';
     protected $guarded =[];
     public $timestamps = false;
-    protected $primarykey = 'participante_id';
-    public function participante(){
-        return $this->belongsTo('App\models\Participante');
+    public function agent(){
+        return $this->belongsToMany('App\models\Agent', 'term_relation', 'term_id', 'object_id');
     }
 }

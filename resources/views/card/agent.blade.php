@@ -8,7 +8,7 @@
     <style>
         :root {
             --primary-color: #F8F7F0;
-            --secondary-color: #071330;
+            --secondary-color: #551A25;
         }
 
         div,
@@ -121,7 +121,7 @@
         }
 
         .campo {
-            margin-bottom: 25px;
+            margin-bottom: 13px;
         }
 
         .tituloCampo {
@@ -139,6 +139,20 @@
             /* overflow: hidden; */
             text-overflow: ellipsis;
             color: var(--secondary-color);
+        }
+
+        .conteudoSeguimento {
+            font-family: "Montserrat", sans-serif;
+            font-size: 16px;
+            padding: 3px;
+            text-align: center;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            /* overflow: hidden; */
+            text-overflow: ellipsis;
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            border-radius: 10px;
         }
 
         .imagePessoa img {
@@ -170,19 +184,22 @@
             width: auto;
             height: 120px;
         }
-        .qrcode{
+
+        .qrcode {
             position: absolute;
             width: 150px;
             height: 150px;
             left: 37%;
             top: 35%;
         }
-        .imageQrcode{
+
+        .imageQrcode {
             width: 100%;
             height: 100%;
             /* border: solid 2px var(--secondary-color); */
             border-radius: 5;
         }
+
         .linhaH {
             position: absolute;
             width: 68%;
@@ -191,25 +208,29 @@
             bottom: 15%;
             border-radius: 0 5 5 0;
         }
-        .impacti{
+
+        .impacti {
             position: absolute;
-            right:4%;
+            right: 4%;
             bottom: 11%;
         }
-        .impacti p{
+
+        .impacti p {
             /* font-family: "Arimo", sans-serif; */
             font-size: 30px;
             font-weight: bold;
             text-transform: uppercase;
             color: var(--primary-color);
         }
-        .textLinha{
+
+        .textLinha {
             position: absolute;
             bottom: 10%;
             right: 32%;
             text-align: center;
         }
-        .textLinha p{
+
+        .textLinha p {
             font-family: "Montserrat", sans-serif;
             font-size: 10px;
             font-weight: bold;
@@ -231,37 +252,63 @@
             </div>
             <div class="campos_esquerdo">
                 <div class="campo">
-                    <p class="tituloCampo">Razão Social:</p>
-                    <p class="conteudoCampo">{{$grupo->razaoGrupo}}</p>
+                    <p class="tituloCampo">Nome completo:</p>
+                    <p class="conteudoCampo">{{$agent->nomeCompleto}}</p>
                 </div>
                 <div class="campo">
-                    <p class="tituloCampo">Nome Fantasia:</p>
-                    <p class="conteudoCampo">{{$grupo->nomeFantasia}}</p>
+                    <p class="tituloCampo">Rg:</p>
+                    @if(isset($agent->rg))
+                    <p class="conteudoCampo">{{$agent->rg}}</p>
+                    @else
+                    <p class="conteudoCampo">Não informado</p>
+                    @endif
                 </div>
                 <div class="campo">
-                    <p class="tituloCampo">Cnpj:</p>
-                    <p class="conteudoCampo">{{$grupo->cnpj}}</p>
+                    <p class="tituloCampo">Pis Pasep:</p>
+                    @if(isset($agent->pisPasep))
+                    <p class="conteudoCampo">{{$agent->pisPasep}}</p>
+                    @else
+
+                    @endif
                 </div>
                 <div class="campo">
-                    <p class="tituloCampo">Seguimento:</p>
-                    <p class="conteudoCampo">{{$grupo->seguimento}}</p>
+                    <p class="tituloCampo" style="margin-bottom:5px ;">Seguimentos:</p>
+                    @if(!empty($agent->term) && isset($agent->term[0]))
+                    @foreach($agent->term as $term)
+                    <p class="conteudoSeguimento">{{$term->term}}</p>
+                    @endforeach
+                    @else
+                    <p class="conteudoCampo">Não informado</p>
+                    @endif
                 </div>
             </div>
             <div class="campos_direito">
-            <div class="campo">
-                    <p class="tituloCampo">Área Atuação:</p>
-                    <p class="conteudoCampo">{{$grupo->areaAtuacao}}</p>
+                <div class="campo">
+                    <p class="tituloCampo">Nome Artistico:</p>
+                    @if(isset($agent->name))
+                    <p class="conteudoCampo">{{$agent->name}}</p>
+                    @else
+                    <p class="conteudoCampo">Não informado</p>
+                    @endif
+                </div>
+                <div class="campo">
+                    <p class="tituloCampo">Cpf:</p>
+                    @if(isset($agent->cpf))
+                    <p class="conteudoCampo">{{$agent->cpf}}</p>
+                    @else
+                    <p class="conteudoCampo">Não informado</p>
+                    @endif
                 </div>
                 <div class="campo">
                     <p class="tituloCampo">Data nascimento:</p>
-                    <p class="conteudoCampo">{{date('d/m/y',strtotime($grupo->dataFundacao))}}</p>
+                    <p class="conteudoCampo">{{date('d/m/y',strtotime($agent->dataDeNascimento))}}</p>
                 </div>
             </div>
             <div class="imagePessoa">
                 <img src="{{$imagens->fotoPessoa}}" alt="Foto da pessoa">
             </div>
             <div class="frontQrcode">
-            <img class="imageQrcode" src="{{$imagens->smallQrcode}}" alt="">
+                <img class="imageQrcode" src="{{$imagens->smallQrcode}}" alt="">
             </div>
         </div>
         <div class="separador"></div>
@@ -270,7 +317,7 @@
                 <img src="{{$imagens->logos}}" alt="logos">
             </div>
             <div class="qrcode">
-            <img class="imageQrcode" src="{{$imagens->qrcode}}" alt="">
+                <img class="imageQrcode" src="{{$imagens->qrcode}}" alt="">
             </div>
             <div class="linhaH"></div>
             <div class="textLinha">

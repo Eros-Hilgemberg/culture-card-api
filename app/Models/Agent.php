@@ -18,4 +18,9 @@ class Agent extends Model
     {
         return $this->hasMany('App\Models\File' ,'object_id');
     }
+    public function term()
+    {
+        return $this->belongsToMany('App\Models\Term', 'term_relation', 'object_id', 'term_id');
+
+    }
 }

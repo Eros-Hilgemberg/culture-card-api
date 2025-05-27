@@ -11,7 +11,6 @@ class AgentMeta extends Model
     protected $table = 'agent_meta';
     protected $guarded =[];
     public $timestamps = false;
-    protected $primarykey = 'participante_id';
     public function agent(){
         return $this->belongsTo('App\models\Agent', 'object_id');
     }
