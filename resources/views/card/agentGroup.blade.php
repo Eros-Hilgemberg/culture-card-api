@@ -143,7 +143,7 @@
 
         .conteudoSeguimento {
             font-family: "Montserrat", sans-serif;
-            font-size: 16px;
+            font-size: 14px;
             padding: 3px;
             text-align: center;
             margin-bottom: 2px;

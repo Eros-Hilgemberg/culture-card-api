@@ -155,7 +155,6 @@
       text-align: center;
       margin-bottom: 2px;
       white-space: nowrap;
-      /* overflow: hidden; */
       text-overflow: ellipsis;
       background-color: var(--secondary-color);
       color: var(--primary-color);
