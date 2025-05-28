@@ -76,7 +76,13 @@ class AgentController extends Controller
         }
 
         $imagens = (object)$imagens;
-        $html = view('card.testimage', ['agent' => $agent, 'imagens' => $imagens])->render();
+
+        if ($agent->type === 1) {
+            $html = view('card.agentImageCard', ['agent' => $agent, 'imagens' => $imagens])->render();
+        } else {
+            $html = view('card.agentGroupImageCard', ['agent' => $agent, 'imagens' => $imagens])->render();
+        }
+
 
         $base64 = Browsershot::html($html)
             ->setOption('args', ['--no-sandbox']) // importante em servidores
