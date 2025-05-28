@@ -12,6 +12,7 @@ Route::prefix('/agent')->group(
     function () {
         Route::get('/{agent}', [AgentController::class, 'show'])->name('agent.index')->where('agent', '[0-9]+');
         Route::get('/card/{id}', [AgentController::class, 'card'])->name('agent.card')->where('id', '[0-9]+');
+        Route::get('/generateImage/{id}', [AgentController::class, 'generateImage'])->name('agent.generateImage')->where('id', '[0-9]+');;
         Route::get('/qrcode/{id}/{cpf}', [AgentController::class, 'qrCode'])->name('agent.cardQrcode')->where('id', '[0-9]+');
     }
 );
