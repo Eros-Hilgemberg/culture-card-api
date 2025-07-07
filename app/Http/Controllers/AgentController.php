@@ -7,26 +7,66 @@ use App\Models\Agent;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Browsershot\Browsershot;
 
 class AgentController extends Controller
 {
-    public function show(Agent $agent): JsonResponse
+    public function login(Request $request): JsonResponse
     {
+        $authService = app()->make('App\Services\AuthService');
+        $converter = new Helper();
 
+        $email = $request->header('email') ?? $request->input('email');
+        $senha = $request->header('password') ?? $request->input('password');
+
+        if (!$email || !$senha) {
+            return response()->json(['message' => 'Credenciais não fornecidas'], 401);
+        }
+
+        $user = $authService->validationCredential($email, $senha);
+
+        if (!$user) {
+            return response()->json(['message' => 'Credenciais inválidas'], 401);
+        }
+
+        $agent = $converter->getAgent($user->profile_id);
+
+        return response()->json([
+            'status' => true,
+            'message' => "Login realizado com sucesso!",
+            'user' => [
+                'id' => $agent->id,
+                'name' => $agent->nomeCompleto,
+            ],
+        ], 200);
+    }
+    public function show(Agent $agent, Request $request): JsonResponse
+    {
+        $authService = app()->make('App\Services\AuthService');
+        $user = $authService->validationCredential($request->email, $request->password);
+
+        if ($user->object_id !== $agent->id) {
+            return response()->json(['message' => 'Não autorizado'], 401);
+        }
         $converter = new Helper();
         $agent = $converter->getAgent($agent->id);
         return response()->json([
             'status' => true,
-            'agent' => $agent,
+            'agent' => [
+                'id' => $agent->id,
+                'nomeCompleto' => $agent->nomeCompleto,
+                'agent_relation' => $agent->agent_relation,
+            ],
         ], 200);
     }
     public function card(int $id)
     {
         $converter = new Helper();
         $agent = $converter->getAgent($id);
+        $url = env('API_URL');
 
-        $menssage = $converter->encodeMessage($id, $agent->cpf ?? $agent->cnpj);
+        $menssage = $url + $id;
 
         $imagens = [
             "fotoPessoa" => $converter->convertImage("PessoaFoto.jpg"),
@@ -57,7 +97,9 @@ class AgentController extends Controller
         $converter = new Helper();
         $agent = $converter->getAgent($id);
 
-        $menssage = $converter->encodeMessage($id, $agent->cpf ?? $agent->cnpj);
+        $url = env('API_URL');
+
+        $menssage = $url + $id;
 
         $imagens = [
             "fotoPessoa" => $converter->convertImage("PessoaFoto.jpg"),

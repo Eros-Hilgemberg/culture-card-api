@@ -18,15 +18,15 @@ class Helper
         $qrcode = "data:image/svg+xml;base64," . base64_encode($qrcodeInf);
         return $qrcode;
     }
-    public function encodeMessage(int $id, $numberdoc)
+    public function encodeMessage(string $menssage)
     {
-        $mensagemConvertida = base64_encode($id . $numberdoc);
+        $mensagemConvertida = base64_encode($menssage);
         return $mensagemConvertida;
     }
 
     public function getAgent(int $id)
     {
-        $agent = Agent::with(['agent_meta', 'file', 'term'])->findOrFail($id);
+        $agent = Agent::with(['agent_meta', 'file', 'term', 'agent_relation'])->findOrFail($id);
 
         $meta_keys = ['nomeCompleto', 'cpf', 'rg', 'cnpj', 'pisPasep', 'dataDeNascimento', 'tempoAtuacao'];
         $meta_values = collect($agent->agent_meta)
@@ -36,6 +36,7 @@ class Helper
 
         $meta_values['term'] = $agent->term ?? null;
         $meta_values['file'] = $agent->file ?? null;
+        $meta_values['agent_relation'] = $agent->agent_relation ?? null;
 
         return (object)[
             'id' => $agent->id,
@@ -50,6 +51,7 @@ class Helper
             'tempoAtuacao' => $meta_values['tempoAtuacao'] ?? null,
             'term' => $meta_values['term'],
             'file' => $meta_values['file'],
+            'agent_relation' => $meta_values['agent_relation'],
         ];
     }
 }

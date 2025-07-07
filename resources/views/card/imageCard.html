@@ -30,7 +30,13 @@
             async function carregarImagem() {
                 try {
                     const resposta = await fetch(
-                        "http://127.0.0.1:8000/api/agent/generateImage/14"
+                        "http://192.168.0.104:8000/api/agent/generateImage/2",
+                        {
+                            method: "GET",
+                            headers: {
+                                "Access-Control-Allow-Origin": "*",
+                            },
+                        }
                     );
                     console.log(resposta);
                     if (!resposta.ok) {
@@ -40,6 +46,7 @@
                     const dados = await resposta.json();
 
                     const imagemBase64 = dados.image_base64;
+                    console.log(imagemBase64);
 
                     // Define o src do <img> com o base64 retornado
                     document.getElementById("imagem").src = imagemBase64;
