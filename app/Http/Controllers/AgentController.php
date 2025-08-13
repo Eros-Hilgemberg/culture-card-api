@@ -46,7 +46,7 @@ class AgentController extends Controller
         $authService = app()->make('App\Services\AuthService');
         $user = $authService->validationCredential($request->email, $request->password);
 
-        if ($user->object_id !== $agent->id) {
+        if ($user->profile_id !== $agent->id) {
             return response()->json(['message' => 'Não autorizado'], 401);
         }
         $converter = new Helper();
@@ -65,11 +65,10 @@ class AgentController extends Controller
         $converter = new Helper();
         $agent = $converter->getAgent($id);
         $url = env('API_URL');
-
-        $menssage = $url + $id;
+        $menssage = $url . $id;
 
         $imagens = [
-            "fotoPessoa" => $converter->convertImage("PessoaFoto.jpg"),
+            "fotoPessoa" => $converter->convertImagePeople($agent->file->first()->path ?? "empty.jpg"),
             "logoConselho" => $converter->convertImage("conselho.png"),
             "logoImpact" => $converter->convertImage("impact.png"),
             "logos" => $converter->convertImage("logos.png"),
@@ -99,10 +98,10 @@ class AgentController extends Controller
 
         $url = env('API_URL');
 
-        $menssage = $url + $id;
+        $menssage = $url . $id;
 
         $imagens = [
-            "fotoPessoa" => $converter->convertImage("PessoaFoto.jpg"),
+            "fotoPessoa" => $converter->convertImagePeople($agent->file->first()->path ?? ""),
             "logoConselho" => $converter->convertImage("conselho.png"),
             "logoImpact" => $converter->convertImage("impact.png"),
             "logos" => $converter->convertImage("logos.png"),
