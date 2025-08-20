@@ -12,21 +12,32 @@ class Helper
         $imageConvertida = "data:image/png;base64," . base64_encode(file_get_contents(public_path("\assets\images/\/" . $caminho)));
         return $imageConvertida;
     }
+    public function convertImagePeople(string $caminho): string
+    {
+        if (empty($caminho)) {
+            $caminho = "empty.jpg";
+        }
+        $caminhoFormatado = str_replace('\\', '/', $caminho);
+
+        $imageConvertida = "data:image/png;base64," . base64_encode(file_get_contents(public_path($caminhoFormatado)));
+
+        return $imageConvertida;
+    }
     public function generateQrcode(String $mensagem, array $color, array $background)
     {
         $qrcodeInf = QrCode::color($color[0], $color[1], $color[2])->backgroundColor($background[0], $background[1], $background[2])->generate($mensagem);
         $qrcode = "data:image/svg+xml;base64," . base64_encode($qrcodeInf);
         return $qrcode;
     }
-    public function encodeMessage(int $id, $numberdoc)
+    public function encodeMessage(string $menssage)
     {
-        $mensagemConvertida = base64_encode($id . $numberdoc);
+        $mensagemConvertida = base64_encode($menssage);
         return $mensagemConvertida;
     }
 
     public function getAgent(int $id)
     {
-        $agent = Agent::with(['agent_meta', 'file', 'term'])->findOrFail($id);
+        $agent = Agent::with(['agent_meta', 'file', 'term', 'agent_relation'])->findOrFail($id);
 
         $meta_keys = ['nomeCompleto', 'cpf', 'rg', 'cnpj', 'pisPasep', 'dataDeNascimento', 'tempoAtuacao'];
         $meta_values = collect($agent->agent_meta)
@@ -36,6 +47,7 @@ class Helper
 
         $meta_values['term'] = $agent->term ?? null;
         $meta_values['file'] = $agent->file ?? null;
+        $meta_values['agent_relation'] = $agent->agent_relation ?? null;
 
         return (object)[
             'id' => $agent->id,
@@ -50,6 +62,7 @@ class Helper
             'tempoAtuacao' => $meta_values['tempoAtuacao'] ?? null,
             'term' => $meta_values['term'],
             'file' => $meta_values['file'],
+            'agent_relation' => $meta_values['agent_relation'],
         ];
     }
 }

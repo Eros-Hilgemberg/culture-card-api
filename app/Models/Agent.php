@@ -12,15 +12,18 @@ class Agent extends Model
     protected $guarded = [];
     public function agent_meta()
     {
-        return $this->hasMany('App\Models\AgentMeta' ,'object_id');
+        return $this->hasMany('App\Models\AgentMeta', 'object_id');
+    }
+    public function agent_relation()
+    {
+        return $this->hasMany('App\Models\AgentRelation', 'agent_id');
     }
     public function file()
     {
-        return $this->hasMany('App\Models\File' ,'object_id');
+        return $this->hasMany('App\Models\File', 'object_id');
     }
     public function term()
     {
         return $this->belongsToMany('App\Models\Term', 'term_relation', 'object_id', 'term_id');
-
     }
 }

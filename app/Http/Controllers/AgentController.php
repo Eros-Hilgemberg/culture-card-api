@@ -7,28 +7,68 @@ use App\Models\Agent;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Browsershot\Browsershot;
 
 class AgentController extends Controller
 {
-    public function show(Agent $agent): JsonResponse
+    public function login(Request $request): JsonResponse
     {
+        $authService = app()->make('App\Services\AuthService');
+        $converter = new Helper();
 
+        $email = $request->header('email') ?? $request->input('email');
+        $senha = $request->header('password') ?? $request->input('password');
+
+        if (!$email || !$senha) {
+            return response()->json(['message' => 'Credenciais não fornecidas'], 401);
+        }
+
+        $user = $authService->validationCredential($email, $senha);
+
+        if (!$user) {
+            return response()->json(['message' => 'Credenciais inválidas'], 401);
+        }
+
+        $agent = $converter->getAgent($user->profile_id);
+
+        return response()->json([
+            'status' => true,
+            'message' => "Login realizado com sucesso!",
+            'user' => [
+                'id' => $agent->id,
+                'name' => $agent->nomeCompleto,
+            ],
+        ], 200);
+    }
+    public function show(Agent $agent, Request $request): JsonResponse
+    {
+        $authService = app()->make('App\Services\AuthService');
+        $user = $authService->validationCredential($request->email, $request->password);
+
+        if ($user->profile_id !== $agent->id) {
+            return response()->json(['message' => 'Não autorizado'], 401);
+        }
         $converter = new Helper();
         $agent = $converter->getAgent($agent->id);
         return response()->json([
             'status' => true,
-            'agent' => $agent,
+            'agent' => [
+                'id' => $agent->id,
+                'nomeCompleto' => $agent->nomeCompleto,
+                'agent_relation' => $agent->agent_relation,
+            ],
         ], 200);
     }
     public function card(int $id)
     {
         $converter = new Helper();
         $agent = $converter->getAgent($id);
-
-        $menssage = $converter->encodeMessage($id, $agent->cpf ?? $agent->cnpj);
+        $url = env('API_URL');
+        $menssage = $url . $id;
 
         $imagens = [
-            "fotoPessoa" => $converter->convertImage("PessoaFoto.jpg"),
+            "fotoPessoa" => $converter->convertImagePeople($agent->file->first()->path ?? "empty.jpg"),
             "logoConselho" => $converter->convertImage("conselho.png"),
             "logoImpact" => $converter->convertImage("impact.png"),
             "logos" => $converter->convertImage("logos.png"),
@@ -50,6 +90,48 @@ class AgentController extends Controller
             $pdf = Pdf::loadView('card.agentGroup', ['agent' => $agent, 'imagens' => $imagens]);
         }
         return $pdf->stream('Card_Agent.pdf');
+    }
+    public function generateImage(int $id)
+    {
+        $converter = new Helper();
+        $agent = $converter->getAgent($id);
+
+        $url = env('API_URL');
+
+        $menssage = $url . $id;
+
+        $imagens = [
+            "fotoPessoa" => $converter->convertImagePeople($agent->file->first()->path ?? ""),
+            "logoConselho" => $converter->convertImage("conselho.png"),
+            "logoImpact" => $converter->convertImage("impact.png"),
+            "logos" => $converter->convertImage("logos.png"),
+            "background" => $converter->convertImage("background.png"),
+        ];
+
+        if ($agent->type == 1) {
+            $imagens["smallQrcode"] = $converter->generateQrcode($menssage, [85, 26, 37], [248, 247, 240]);
+            $imagens["qrcode"] = $converter->generateQrcode($menssage, [248, 247, 240], [85, 26, 37]);
+        } else {
+            $imagens["smallQrcode"] = $converter->generateQrcode($menssage, [7, 19, 48], [248, 247, 240]);
+            $imagens["qrcode"] = $converter->generateQrcode($menssage, [248, 247, 240], [7, 19, 48]);
+        }
+
+        $imagens = (object)$imagens;
+
+        if ($agent->type === 1) {
+            $html = view('card.agentImageCard', ['agent' => $agent, 'imagens' => $imagens])->render();
+        } else {
+            $html = view('card.agentGroupImageCard', ['agent' => $agent, 'imagens' => $imagens])->render();
+        }
+
+
+        $base64 = Browsershot::html($html)
+            ->setOption('args', ['--no-sandbox']) // importante em servidores
+            ->windowSize(600, 400)
+            ->base64Screenshot();
+        return response()->json([
+            'image_base64' => 'data:image/png;base64,' . $base64
+        ]);
     }
     public function qrCode(int $id, string $cpf)
     {

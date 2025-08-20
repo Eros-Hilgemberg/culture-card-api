@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Exibir Imagem Base64 da API</title>
+        <style>
+            #container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex: 1;
+                background-color: #f0f0f0;
+            }
+            #imagem {
+                max-width: 100%;
+                height: auto;
+                border: 2px solid #ccc;
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Imagem da API</h1>
+        <button onclick="carregarImagem()">Carregar Imagem</button>
+        <div id="container">
+            <img id="imagem" alt="Imagem carregada da API" />
+        </div>
+
+        <script>
+            async function carregarImagem() {
+                try {
+                    const resposta = await fetch(
+                        "http://192.168.0.104:8000/api/agent/generateImage/2",
+                        {
+                            method: "GET",
+                            headers: {
+                                "Access-Control-Allow-Origin": "*",
+                            },
+                        }
+                    );
+                    console.log(resposta);
+                    if (!resposta.ok) {
+                        throw new Error("Erro ao buscar imagem da API");
+                    }
+
+                    const dados = await resposta.json();
+
+                    const imagemBase64 = dados.image_base64;
+                    console.log(imagemBase64);
+
+                    // Define o src do <img> com o base64 retornado
+                    document.getElementById("imagem").src = imagemBase64;
+                } catch (erro) {
+                    console.error(erro);
+                    alert("Erro ao carregar a imagem.");
+                }
+            }
+        </script>
+    </body>
+</html>

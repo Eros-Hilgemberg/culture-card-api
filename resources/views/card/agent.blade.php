@@ -143,7 +143,7 @@
 
         .conteudoSeguimento {
             font-family: "Montserrat", sans-serif;
-            font-size: 16px;
+            font-size: 14px;
             padding: 3px;
             text-align: center;
             margin-bottom: 2px;
@@ -268,26 +268,6 @@
                     @if(isset($agent->pisPasep))
                     <p class="conteudoCampo">{{$agent->pisPasep}}</p>
                     @else
-
-                    @endif
-                </div>
-                <div class="campo">
-                    <p class="tituloCampo" style="margin-bottom:5px ;">Seguimentos:</p>
-                    @if(!empty($agent->term) && isset($agent->term[0]))
-                    @foreach($agent->term as $term)
-                    <p class="conteudoSeguimento">{{$term->term}}</p>
-                    @endforeach
-                    @else
-                    <p class="conteudoCampo">Não informado</p>
-                    @endif
-                </div>
-            </div>
-            <div class="campos_direito">
-                <div class="campo">
-                    <p class="tituloCampo">Nome Artistico:</p>
-                    @if(isset($agent->name))
-                    <p class="conteudoCampo">{{$agent->name}}</p>
-                    @else
                     <p class="conteudoCampo">Não informado</p>
                     @endif
                 </div>
@@ -303,6 +283,28 @@
                     <p class="tituloCampo">Data nascimento:</p>
                     <p class="conteudoCampo">{{date('d/m/y',strtotime($agent->dataDeNascimento))}}</p>
                 </div>
+
+            </div>
+            <div class="campos_direito">
+                <div class="campo">
+                    <p class="tituloCampo">Nome Artistico:</p>
+                    @if(isset($agent->name))
+                    <p class="conteudoCampo">{{$agent->name}}</p>
+                    @else
+                    <p class="conteudoCampo">Não informado</p>
+                    @endif
+                </div>
+                <div class="campo">
+                    <p class="tituloCampo" style="margin-bottom:5px ;">Seguimentos:</p>
+                    @if(!empty($agent->term) && isset($agent->term[0]))
+                    @foreach($agent->term as $term)
+                    <p class="conteudoSeguimento">{{$term->term}}</p>
+                    @endforeach
+                    @else
+                    <p class="conteudoCampo">Não informado</p>
+                    @endif
+                </div>
+
             </div>
             <div class="imagePessoa">
                 <img src="{{$imagens->fotoPessoa}}" alt="Foto da pessoa">
