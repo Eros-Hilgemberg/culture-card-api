@@ -119,18 +119,25 @@ class AgentController extends Controller
         $imagens = (object)$imagens;
 
         if ($agent->type === 1) {
-            $html = view('card.agentImageCard', ['agent' => $agent, 'imagens' => $imagens])->render();
+            $html_front = view('card.agentImageCard', ['agent' => $agent, 'imagens' => $imagens])->render();
+            $html_back = view('card.cardAgentBack', ['agent' => $agent, 'imagens' => $imagens])->render();
         } else {
-            $html = view('card.agentGroupImageCard', ['agent' => $agent, 'imagens' => $imagens])->render();
+            $html_front = view('card.agentGroupImageCard', ['agent' => $agent, 'imagens' => $imagens])->render();
+            $html_back = view('card.cardGroupBack', ['agent' => $agent, 'imagens' => $imagens])->render();
         }
 
 
-        $base64 = Browsershot::html($html)
+        $base64_front = Browsershot::html($html_front)
+            ->setOption('args', ['--no-sandbox']) // importante em servidores
+            ->windowSize(600, 400)
+            ->base64Screenshot();
+        $base64_back = Browsershot::html($html_back)
             ->setOption('args', ['--no-sandbox']) // importante em servidores
             ->windowSize(600, 400)
             ->base64Screenshot();
         return response()->json([
-            'image_base64' => 'data:image/png;base64,' . $base64
+            'image_base64_front' => 'data:image/png;base64,' . $base64_front,
+            'image_base64_back' => 'data:image/png;base64,' . $base64_back
         ]);
     }
     public function qrCode(int $id, string $cpf)
