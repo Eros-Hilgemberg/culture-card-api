@@ -30,7 +30,7 @@
             async function carregarImagem() {
                 try {
                     const resposta = await fetch(
-                        "http://192.168.0.104:8000/api/agent/generateImage/2",
+                        "http://localhost:8000/api/agent/generateImage/2?email=Admin@local&password=mapas123",
                         {
                             method: "GET",
                             headers: {
@@ -52,7 +52,7 @@
                     document.getElementById("imagem").src = imagemBase64;
                 } catch (erro) {
                     console.error(erro);
-                    alert("Erro ao carregar a imagem.");
+                    alert(erro.message);
                 }
             }
         </script>

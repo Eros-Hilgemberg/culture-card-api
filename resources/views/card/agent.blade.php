@@ -178,9 +178,9 @@
 
         .superior img {
             position: absolute;
-            top: 0%;
-            left: 6%;
-            right: 5%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             width: auto;
             height: 120px;
         }
