@@ -85,7 +85,8 @@ cp .env.example .env
 
 ```
 
-> Obs: No arquivo .env deve ser configurado a conexão com o banco de dados e o caminho da pasta onde os arquivos de imagens estão localizados.
+> Obs: No arquivo .env deve ser configurado a conexão com o banco de dados, o caminho da pasta onde os arquivos de imagens estão localizados e a url do sistema para incluir no Qrcode da carteira.
+> A url do sistema deve ser incluída no campo API_URL do arquivo config.ini
 
 ### 5. Rode o servidor backend
 
