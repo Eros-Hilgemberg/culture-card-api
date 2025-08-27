@@ -1,44 +1,100 @@
 # Projeto Laravel com Vite, Tailwind CSS e Geração de PDF
 
-Este é um projeto baseado no framework Laravel, com integração ao Vite para gerenciamento dos assets front-end e Tailwind CSS para estilização. Além disso, o projeto conta com geração de PDF e QR Codes.
+Este projeto utiliza o **Laravel** como framework principal, com integração ao **Vite** para gerenciamento de assets front-end e **Tailwind CSS** para estilização.  
+Além disso, conta com funcionalidades de geração de **PDFs**, **QR Codes** e conversão de **templates Blade em imagens**.
 
-## Requisitos
+---
 
--   PHP >= 8.2
--   Composer
--   Node.js e npm
+## 🚀 Requisitos
 
-### PHP / Laravel
+-   **PHP** >= 8.2
+-   **Composer**
+-   **Node.js** + **npm**
 
--   `laravel/framework` - Framework Laravel
--   `laravel/sanctum` - Autenticação via tokens
--   `laravel/tinker` - Shell interativo
--   `barryvdh/laravel-dompdf` - Geração de PDFs
--   `simplesoftwareio/simple-qrcode` - Geração de QR Codes
--   `spatie/browsershot` - Conversor blade para png
--   `puppeteer` - auxiliar browershot
+---
 
-## Principais pastas e arquivos
+## 📦 Dependências principais
 
--   app:
+### Backend (Laravel)
 
-    -   Helpers: Arquivos de funções auxiliares, como conversões de imagens,
-        geração de qrcodes e funções utilizadas em outras.
-    -   Http / Controllers: Contém os arquivos das principais funções do sistema.
-    -   Http / Middleware: Funções relacionadas a autenthicação das rotas.
-    -   Models: Classes e funções utilizadas para vincular as tabelas do banco de dados.
-    -   Services: Armazena funções relacionadas a autenticação.
+-   `laravel/framework` – Framework Laravel
+-   `laravel/sanctum` – Autenticação via tokens
+-   `laravel/tinker` – Shell interativo
 
--   public:
+### Funcionalidades extras
 
-    -   assets: arquivos utilizados de imagens e ícones utilizados para a geração da Carteira.
+-   `barryvdh/laravel-dompdf` – Geração de PDFs
+-   `simplesoftwareio/simple-qrcode` – Criação de QR Codes
+-   `spatie/browsershot` – Conversão de Blade para PNG
+-   `puppeteer` – Suporte ao Browsershot
 
-        > Observação: Recomendado que os arquivos de imagens dos participantes sejam
-        > armazenados nesta pasta, como o exemplo da pasta agent.
+---
 
--   resources:
+## 📂 Estrutura do Projeto
 
-    -   views: Armazena os arquivos relacionados a geração dos pdf's, carteira e imagens.
+### **app/**
 
--   routes:
-    -   api.php: Arquivo onde estão localizadas todas as rotas da API.
+-   **Helpers/** – Funções auxiliares (ex.: conversão de imagens, geração de QR Codes).
+-   **Http/Controllers/** – Controladores com a lógica principal do sistema.
+-   **Http/Middleware/** – Middlewares de autenticação e proteção de rotas.
+-   **Models/** – Modelos para interação com tabelas do banco de dados.
+-   **Services/** – Serviços relacionados à autenticação e regras de negócio.
+
+### **public/**
+
+-   **assets/** – Imagens e ícones utilizados na geração das carteiras.
+    > Recomendação: armazenar aqui as fotos dos participantes (ex.: `public/assets/agent`).
+
+### **resources/**
+
+-   **views/** – Arquivos Blade usados na geração de PDFs, carteiras e templates visuais.
+
+### **routes/**
+
+-   **api.php** – Contém todas as rotas da API.
+
+---
+
+## ⚙️ Instalação e Execução
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/seu-usuario/seu-repositorio.git
+cd seu-repositorio
+```
+
+### 2. Instale as dependências do PHP
+
+```bash
+composer install
+```
+
+### 3. Instale as dependências do node
+
+```bash
+npm install
+```
+
+### 4. Configure o arquivo .env
+
+Crie o arquivo .env a partir do exemplo:
+
+```bash
+cp .env.example .env
+
+```
+
+> Obs: No arquivo .env deve ser configurado a conexão com o banco de dados e o caminho da pasta onde os arquivos de imagens estão localizados.
+
+### 5. Rode o servidor backend
+
+```bash
+php artisan serve
+```
+
+## 📌 Observações
+
+Para melhor organização, mantenha os assets de imagens na pasta public/assets/.
+
+O projeto está configurado para facilitar a geração de documentos e imagens personalizadas (carteiras, certificados, etc.).
