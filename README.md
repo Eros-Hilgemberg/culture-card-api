@@ -96,6 +96,6 @@ php artisan serve
 
 ## 📌 Observações
 
-Para melhor organização, mantenha os assets de imagens na pasta public/assets/.
+Para melhor organização, mantenha os assets de imagens na pasta public/.
 
 O projeto está configurado para facilitar a geração de documentos e imagens personalizadas (carteiras, certificados, etc.).
