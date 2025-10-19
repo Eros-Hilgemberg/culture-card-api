@@ -39,6 +39,11 @@ class Helper
     {
         $agent = Agent::with(['agent_meta', 'file', 'term', 'agent_relation'])->findOrFail($id);
 
+        if (!$agent) {
+            throw new \Exception("Agent not found");
+            return null;
+        }
+
         $meta_keys = ['nomeCompleto', 'cpf', 'rg', 'cnpj', 'pisPasep', 'dataDeNascimento', 'tempoAtuacao'];
         $meta_values = collect($agent->agent_meta)
             ->filter(fn($meta) => in_array($meta->key, $meta_keys))

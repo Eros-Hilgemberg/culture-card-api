@@ -51,6 +51,11 @@ class AgentController extends Controller
         }
         $converter = new Helper();
         $agent = $converter->getAgent($agent->id);
+
+        if (!$agent) {
+            return response()->json(['message' => 'Agente não encontrado'], 404);
+        }
+
         return response()->json([
             'status' => true,
             'agent' => [
@@ -64,6 +69,15 @@ class AgentController extends Controller
     {
         $converter = new Helper();
         $agent = $converter->getAgent($id);
+
+        if (!$agent) {
+            return response()->json(['message' => 'Agente não encontrado'], 404);
+        }
+
+        if (!$agent->file || $agent->file->isEmpty()) {
+            return response()->json(['message' => 'Dados incompletos!'], 404);
+        }
+
         $url = env('API_URL');
         $menssage = $url . $id;
 
@@ -95,6 +109,14 @@ class AgentController extends Controller
     {
         $converter = new Helper();
         $agent = $converter->getAgent($id);
+
+        if (!$agent) {
+            return response()->json(['message' => 'Agente não encontrado'], 404);
+        }
+
+        if (!$agent->file || $agent->file->isEmpty()) {
+            return response()->json(['message' => 'Dados incompletos!'], 404);
+        }
 
         $url = env('API_URL');
 
