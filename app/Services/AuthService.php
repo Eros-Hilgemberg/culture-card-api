@@ -23,7 +23,9 @@ class AuthService
       return null; // usuário não encontrado
     }
 
-    if (!$user->user_meta || !Hash::check($password, $user->user_meta->value)) {
+    $passwordMeta = $user->user_meta()->where('key', 'localAuthenticationPassword')->first();
+
+    if (!$passwordMeta || !Hash::check($password, $passwordMeta->value)) {
       return null; // password incorreta
     }
 
